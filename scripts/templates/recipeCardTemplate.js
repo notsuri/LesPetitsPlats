@@ -39,15 +39,17 @@ export function recipeCardTemplate(recipe) {
     const h4 = document.createElement("h4");
     h4.className = "name";
     h4.textContent = ingredient.ingredient;
-    const quantity = document.createElement("p");
-    quantity.className = "quantity";
-    if (ingredient.unit) {
-      quantity.textContent = `${ingredient.quantity} ${ingredient.unit}`;
-    } else {
-      quantity.textContent = `${ingredient.quantity}`;
-    }
     div.appendChild(h4);
-    div.appendChild(quantity);
+    if (ingredient.quantity) {
+      const quantity = document.createElement("p");
+      quantity.className = "quantity";
+      if (ingredient.unit) {
+        quantity.textContent = `${ingredient.quantity} ${ingredient.unit}`;
+      } else {
+        quantity.textContent = `${ingredient.quantity}`;
+      }
+      div.appendChild(quantity);
+    }
     recetteIngredient.appendChild(div);
   }
 
