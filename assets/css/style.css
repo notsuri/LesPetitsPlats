@@ -108,6 +108,7 @@ h1 {
 .dropdown-list {
   max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .dropdown-item {
   color: black;
@@ -119,6 +120,7 @@ h1 {
   background-color: #fff;
   width: 100%;
   font-size: 0.7em;
+  text-overflow: ellipsis;
 }
 .dropdown-item:hover {
   background-color: #ffd15b;
