@@ -7,12 +7,13 @@ import { recipes } from "../../data/recipes.js";
 class App {
   constructor() {
     // Initialisation des listes et des filtres
+
     this.mainFilters = [];
     this.tagFilters = [];
 
-    this.appliances = [];
-    this.ingredients = [];
-    this.ustensils = [];
+    this.appliances = []; // Liste des appareils
+    this.ingredients = []; // Liste des ingredients
+    this.ustensils = []; // Liste des ustensiles
   }
 
   // Fonction pour obtenir toutes les catégories (ingrédients, appareils, ustensiles)
@@ -128,27 +129,49 @@ class App {
 
   // Fonction pour gérer la recherche principale
   updateMainSearch(search) {
-    search = transformNormalize(search.trim()).toLowerCase();
     // sépare le texte dans search en tableau de mots
-    const words = search.split(/\s+/).filter((word) => word.length >= 3);
-
+    const wordsArray = transformNormalize(search.trim())
+      .toLowerCase()
+      .split(/\s+/);
+    const words = [];
+    for (let i = 0; i < wordsArray.length; i++) {
+      const word = wordsArray[i];
+      if (word.length >= 3) {
+        words.push(word);
+      }
+    }
     if (words.length > 0) {
-      this.mainFilters = recipes.filter((recipe) =>
-        words.some((word) => {
-          const found = recipe.ingredients.some((ingredient) =>
-            transformNormalize(ingredient.ingredient).includes(word)
-          );
+      let mainFilters = [];
 
+      for (let i = 0; i < recipes.length; i++) {
+        let recipe = recipes[i];
+        let foundInRecipe = false;
+
+        for (let j = 0; j < words.length; j++) {
+          let word = words[j];
+          let found = false;
+
+          for (let k = 0; k < recipe.ingredients.length; k++) {
+            let ingredient = recipe.ingredients[k];
+            if (transformNormalize(ingredient.ingredient).includes(word)) {
+              found = true;
+              break;
+            }
+          }
           if (
-            transformNormalize(recipe.name.toLowerCase()).includes(word) ||
             found ||
+            transformNormalize(recipe.name.toLowerCase()).includes(word) ||
             transformNormalize(recipe.description.toLowerCase()).includes(word)
           ) {
-            return true;
+            foundInRecipe = true;
+            break;
           }
-          return false;
-        })
-      );
+        }
+        if (foundInRecipe) {
+          mainFilters.push(recipe);
+        }
+      }
+      this.mainFilters = mainFilters;
     } else {
       this.mainFilters = recipes;
     }
